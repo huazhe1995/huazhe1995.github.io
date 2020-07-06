@@ -1,0 +1,435 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>tensorflow object detection API 训练自己的数据集 | huazhe's blog</title><meta name="description" content="tensorflow object detection API 训练数据集1. API的安装官方github地址下载object_detection和slim文件内容安装可参照官方文档 2. 制作tfrecord数据集a. voc2007_to_tfrecord首先制作voc数据集 通过dataset_tools&#x2F;create_pascal_tf_record.py进行转换 # Copyright"><meta name="keywords" content="object detection"><meta name="author" content="huazhe"><meta name="copyright" content="huazhe"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.png"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="dns-prefetch" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="crossorigin"/><link rel="dns-prefetch" href="https://fonts.googleapis.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="dns-prefetch" href="//busuanzi.ibruce.info"/><meta name="twitter:card" content="summary"><meta name="twitter:title" content="tensorflow object detection API 训练自己的数据集"><meta name="twitter:description" content="tensorflow object detection API 训练数据集1. API的安装官方github地址下载object_detection和slim文件内容安装可参照官方文档 2. 制作tfrecord数据集a. voc2007_to_tfrecord首先制作voc数据集 通过dataset_tools&#x2F;create_pascal_tf_record.py进行转换 # Copyright"><meta name="twitter:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><meta property="og:type" content="article"><meta property="og:title" content="tensorflow object detection API 训练自己的数据集"><meta property="og:url" content="http://huazhe1995.github.io/2020/03/14/tensorflow-object-detection-api-xun-lian-zi-ji-de-shu-ju-ji/"><meta property="og:site_name" content="huazhe's blog"><meta property="og:description" content="tensorflow object detection API 训练数据集1. API的安装官方github地址下载object_detection和slim文件内容安装可参照官方文档 2. 制作tfrecord数据集a. voc2007_to_tfrecord首先制作voc数据集 通过dataset_tools&#x2F;create_pascal_tf_record.py进行转换 # Copyright"><meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><meta property="article:published_time" content="2020-03-14T08:13:51.000Z"><meta property="article:modified_time" content="2020-04-12T15:11:56.000Z"><script src="https://cdn.jsdelivr.net/npm/js-cookie/dist/js.cookie.min.js"></script><script>var autoChangeMode = '1'
+var t = Cookies.get("theme")
+if (autoChangeMode == '1'){
+  var isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches
+  var isLightMode = window.matchMedia("(prefers-color-scheme: light)").matches
+  var isNotSpecified = window.matchMedia("(prefers-color-scheme: no-preference)").matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+  if (t === undefined){
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport){
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour < 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+  }
+  } else if (t == 'light') activateLightMode()
+  else activateDarkMode()
+
+} else if (autoChangeMode == '2'){
+  now = new Date();
+  hour = now.getHours();
+  isNight = hour < 6 || hour >= 18
+  if(t === undefined) isNight? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode() 
+} else {
+  if ( t == 'dark' ) activateDarkMode()
+  else if ( t == 'light') activateLightMode()
+}
+
+function activateDarkMode(){
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+    document.querySelector('meta[name="theme-color"]').setAttribute('content','#000')
+  }
+}
+function activateLightMode(){
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+  document.querySelector('meta[name="theme-color"]').setAttribute('content','#fff')
+  }
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="canonical" href="http://huazhe1995.github.io/2020/03/14/tensorflow-object-detection-api-xun-lian-zi-ji-de-shu-ju-ji/"><link rel="prev" title="ROS调用cv_bridge问题" href="http://huazhe1995.github.io/2020/03/14/ros-diao-yong-cv-bridge-wen-ti/"><link rel="next" title="ROS下intel realsense D435i安装" href="http://huazhe1995.github.io/2020/02/09/ros-xia-intel-realsense-d435i-an-zhuang/"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"cookieDomain":"https://xxx/","msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  bookmark: {
+    message_prev: '按',
+    message_next: '键将本页加入书签'
+  },
+  runtime_unit: '天',
+  runtime: true,
+  copyright: undefined,
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  highlightShrink: 'false',
+  isFontAwesomeV5: false,
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+  
+}</script><script>var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isSidebar: true  
+  }</script><noscript><style>
+#page-header {
+  opacity: 1
+}
+.justified-gallery img{
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="huazhe's blog" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">17</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">17</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分类</div><div class="length_num">7</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> About</span></a></div></div></div></div><i class="fa fa-arrow-right on" id="toggle-sidebar" aria-hidden="true">     </i><div id="sidebar"><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#tensorflow-object-detection-API-训练数据集"><span class="toc-number">1.</span> <span class="toc-text">tensorflow object detection API 训练数据集</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-API的安装"><span class="toc-number">1.1.</span> <span class="toc-text">1. API的安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-制作tfrecord数据集"><span class="toc-number">1.2.</span> <span class="toc-text">2. 制作tfrecord数据集</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#a-voc2007-to-tfrecord"><span class="toc-number">1.2.1.</span> <span class="toc-text">a. voc2007_to_tfrecord</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#b-tfrecord制作"><span class="toc-number">1.2.2.</span> <span class="toc-text">b. tfrecord制作</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-训练准备"><span class="toc-number">1.3.</span> <span class="toc-text">3. 训练准备</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#a-下载预训练模型"><span class="toc-number">1.3.1.</span> <span class="toc-text">a. 下载预训练模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#b-config文件修改"><span class="toc-number">1.3.2.</span> <span class="toc-text">b. config文件修改</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#c-pbtxt文件"><span class="toc-number">1.3.3.</span> <span class="toc-text">c. .pbtxt文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-训练模型"><span class="toc-number">1.4.</span> <span class="toc-text">4. 训练模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#a-model-main-py"><span class="toc-number">1.4.1.</span> <span class="toc-text">a. model_main .py</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#b-train-py-旧版-legacy"><span class="toc-number">1.4.2.</span> <span class="toc-text">b. train .py(旧版 legacy&#x2F;)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-tesorboard"><span class="toc-number">1.5.</span> <span class="toc-text">5. tesorboard</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-模型转换"><span class="toc-number">1.6.</span> <span class="toc-text">6. 模型转换</span></a></li></ol></li></ol></div></div></div><div id="body-wrap"><div class="post-bg" id="nav" style="background-image: url(https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg)"><div id="page-header"><span class="pull_left" id="blog_name"><a class="blog_title" id="site-name" href="/">huazhe's blog</a></span><span class="pull_right menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> About</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fa fa-bars fa-fw" aria-hidden="true"></i></a></span></span></div><div id="post-info"><div id="post-title"><div class="posttitle">tensorflow object detection API 训练自己的数据集</div></div><div id="post-meta"><div class="meta-firstline"><time class="post-meta__date"><span class="post-meta__date-created" title="发表于 2020-03-14 16:13:51"><i class="fa fa-calendar" aria-hidden="true"></i> 发表于 2020-03-14</span><span class="post-meta__separator">|</span><span class="post-meta__date-updated" title="更新于 2020-04-12 23:11:56"><i class="fa fa-history" aria-hidden="true"></i> 更新于 2020-04-12</span></time><span class="post-meta__categories"><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/tensorflow/">tensorflow</a></span></div><div class="meta-secondline"> </div><div class="meta-thirdline"><span class="post-meta-pv-cv"><i class="fa fa-eye post-meta__icon" aria-hidden="true"> </i><span>阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-commentcount"></span></div></div></div></div><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><h1 id="tensorflow-object-detection-API-训练数据集"><a href="#tensorflow-object-detection-API-训练数据集" class="headerlink" title="tensorflow object detection API 训练数据集"></a>tensorflow object detection API 训练数据集</h1><h2 id="1-API的安装"><a href="#1-API的安装" class="headerlink" title="1. API的安装"></a>1. API的安装</h2><p><a href="https://github.com/tensorflow/models" target="_blank" rel="noopener">官方github地址</a><br>下载object_detection和slim文件内容<br>安装可参照<a href="https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/installation.md" target="_blank" rel="noopener">官方文档</a></p>
+<h2 id="2-制作tfrecord数据集"><a href="#2-制作tfrecord数据集" class="headerlink" title="2. 制作tfrecord数据集"></a>2. 制作tfrecord数据集</h2><h3 id="a-voc2007-to-tfrecord"><a href="#a-voc2007-to-tfrecord" class="headerlink" title="a. voc2007_to_tfrecord"></a>a. voc2007_to_tfrecord</h3><p>首先制作voc数据集 通过dataset_tools/create_pascal_tf_record.py进行转换</p>
+<pre class="line-numbers language-python"><code class="language-python"><span class="token comment" spellcheck="true"># Copyright 2017 The TensorFlow Authors. All Rights Reserved.</span>
+<span class="token comment" spellcheck="true">#</span>
+<span class="token comment" spellcheck="true"># Licensed under the Apache License, Version 2.0 (the "License");</span>
+<span class="token comment" spellcheck="true"># you may not use this file except in compliance with the License.</span>
+<span class="token comment" spellcheck="true"># You may obtain a copy of the License at</span>
+<span class="token comment" spellcheck="true">#</span>
+<span class="token comment" spellcheck="true">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="token comment" spellcheck="true">#</span>
+<span class="token comment" spellcheck="true"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="token comment" spellcheck="true"># distributed under the License is distributed on an "AS IS" BASIS,</span>
+<span class="token comment" spellcheck="true"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="token comment" spellcheck="true"># See the License for the specific language governing permissions and</span>
+<span class="token comment" spellcheck="true"># limitations under the License.</span>
+<span class="token comment" spellcheck="true"># ==============================================================================</span>
+
+<span class="token triple-quoted-string string">"""Convert raw PASCAL dataset to TFRecord for object_detection.
+Example usage:
+    #下方代码用于生产tfrecord文件，根据文件目录相应调整。
+    python create_pascal_tf_record.py  --data_dir=/home/huazhe/VOCdevkit  --year=VOC2007  --output_path=pascal.record
+"""</span>
+<span class="token keyword">from</span> __future__ <span class="token keyword">import</span> absolute_import
+<span class="token keyword">from</span> __future__ <span class="token keyword">import</span> division
+<span class="token keyword">from</span> __future__ <span class="token keyword">import</span> print_function
+
+<span class="token keyword">import</span> hashlib
+<span class="token keyword">import</span> io
+<span class="token keyword">import</span> logging
+<span class="token keyword">import</span> os
+
+<span class="token keyword">from</span> lxml <span class="token keyword">import</span> etree
+<span class="token keyword">import</span> PIL<span class="token punctuation">.</span>Image
+<span class="token keyword">import</span> tensorflow <span class="token keyword">as</span> tf
+
+<span class="token keyword">from</span> object_detection<span class="token punctuation">.</span>utils <span class="token keyword">import</span> dataset_util
+<span class="token keyword">from</span> object_detection<span class="token punctuation">.</span>utils <span class="token keyword">import</span> label_map_util
+
+
+flags <span class="token operator">=</span> tf<span class="token punctuation">.</span>app<span class="token punctuation">.</span>flags
+flags<span class="token punctuation">.</span>DEFINE_string<span class="token punctuation">(</span><span class="token string">'data_dir'</span><span class="token punctuation">,</span> <span class="token string">''</span><span class="token punctuation">,</span> <span class="token string">'Root directory to raw PASCAL VOC dataset.'</span><span class="token punctuation">)</span>
+flags<span class="token punctuation">.</span>DEFINE_string<span class="token punctuation">(</span><span class="token string">'set'</span><span class="token punctuation">,</span> <span class="token string">'train'</span><span class="token punctuation">,</span> <span class="token string">'Convert training set, validation set or '</span>
+                    <span class="token string">'merged set.'</span><span class="token punctuation">)</span>
+flags<span class="token punctuation">.</span>DEFINE_string<span class="token punctuation">(</span><span class="token string">'annotations_dir'</span><span class="token punctuation">,</span> <span class="token string">'Annotations'</span><span class="token punctuation">,</span>
+                    <span class="token string">'(Relative) path to annotations directory.'</span><span class="token punctuation">)</span>
+flags<span class="token punctuation">.</span>DEFINE_string<span class="token punctuation">(</span><span class="token string">'year'</span><span class="token punctuation">,</span> <span class="token string">'VOC2007'</span><span class="token punctuation">,</span> <span class="token string">'Desired challenge year.'</span><span class="token punctuation">)</span>
+flags<span class="token punctuation">.</span>DEFINE_string<span class="token punctuation">(</span><span class="token string">'output_path'</span><span class="token punctuation">,</span> <span class="token string">''</span><span class="token punctuation">,</span> <span class="token string">'Path to output TFRecord'</span><span class="token punctuation">)</span>
+flags<span class="token punctuation">.</span>DEFINE_string<span class="token punctuation">(</span><span class="token string">'label_map_path'</span><span class="token punctuation">,</span> <span class="token string">'person_label_map.pbtxt'</span><span class="token punctuation">,</span>
+                    <span class="token string">'Path to label map proto'</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#person_label_map.pbtxt文件位置调整</span>
+flags<span class="token punctuation">.</span>DEFINE_boolean<span class="token punctuation">(</span><span class="token string">'ignore_difficult_instances'</span><span class="token punctuation">,</span> <span class="token boolean">False</span><span class="token punctuation">,</span> <span class="token string">'Whether to ignore '</span>
+                     <span class="token string">'difficult instances'</span><span class="token punctuation">)</span>
+FLAGS <span class="token operator">=</span> flags<span class="token punctuation">.</span>FLAGS
+
+SETS <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">'train'</span><span class="token punctuation">,</span> <span class="token string">'val'</span><span class="token punctuation">,</span> <span class="token string">'trainval'</span><span class="token punctuation">,</span> <span class="token string">'test'</span><span class="token punctuation">]</span>
+YEARS <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">'VOC2007'</span><span class="token punctuation">,</span> <span class="token string">'VOC2012'</span><span class="token punctuation">,</span> <span class="token string">'merged'</span><span class="token punctuation">]</span>
+
+
+<span class="token keyword">def</span> <span class="token function">dict_to_tf_example</span><span class="token punctuation">(</span>data<span class="token punctuation">,</span>
+                       dataset_directory<span class="token punctuation">,</span>
+                       label_map_dict<span class="token punctuation">,</span>
+                       ignore_difficult_instances<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span>
+                       image_subdirectory<span class="token operator">=</span><span class="token string">'JPEGImages'</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+  <span class="token triple-quoted-string string">"""Convert XML derived dict to tf.Example proto.
+  Notice that this function normalizes the bounding box coordinates provided
+  by the raw data.
+  Args:
+    data: dict holding PASCAL XML fields for a single image (obtained by
+      running dataset_util.recursive_parse_xml_to_dict)
+    dataset_directory: Path to root directory holding PASCAL dataset
+    label_map_dict: A map from string label names to integers ids.
+    ignore_difficult_instances: Whether to skip difficult instances in the
+      dataset  (default: False).
+    image_subdirectory: String specifying subdirectory within the
+      PASCAL dataset directory holding the actual image data.
+  Returns:
+    example: The converted tf.Example.
+  Raises:
+    ValueError: if the image pointed to by data['filename'] is not a valid JPEG
+  """</span>
+  img_path <span class="token operator">=</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>join<span class="token punctuation">(</span><span class="token string">'VOC2007'</span><span class="token punctuation">,</span> image_subdirectory<span class="token punctuation">,</span> data<span class="token punctuation">[</span><span class="token string">'filename'</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#调整对应图片存放路径</span>
+  full_path <span class="token operator">=</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>join<span class="token punctuation">(</span>dataset_directory<span class="token punctuation">,</span> img_path<span class="token punctuation">)</span>
+  <span class="token keyword">with</span> tf<span class="token punctuation">.</span>gfile<span class="token punctuation">.</span>GFile<span class="token punctuation">(</span>full_path<span class="token punctuation">,</span> <span class="token string">'rb'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> fid<span class="token punctuation">:</span>
+    encoded_jpg <span class="token operator">=</span> fid<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>
+  encoded_jpg_io <span class="token operator">=</span> io<span class="token punctuation">.</span>BytesIO<span class="token punctuation">(</span>encoded_jpg<span class="token punctuation">)</span>
+  image <span class="token operator">=</span> PIL<span class="token punctuation">.</span>Image<span class="token punctuation">.</span>open<span class="token punctuation">(</span>encoded_jpg_io<span class="token punctuation">)</span>
+  <span class="token keyword">if</span> image<span class="token punctuation">.</span>format <span class="token operator">!=</span> <span class="token string">'JPEG'</span><span class="token punctuation">:</span>
+    <span class="token keyword">raise</span> ValueError<span class="token punctuation">(</span><span class="token string">'Image format not JPEG'</span><span class="token punctuation">)</span>
+  key <span class="token operator">=</span> hashlib<span class="token punctuation">.</span>sha256<span class="token punctuation">(</span>encoded_jpg<span class="token punctuation">)</span><span class="token punctuation">.</span>hexdigest<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+  width <span class="token operator">=</span> int<span class="token punctuation">(</span>data<span class="token punctuation">[</span><span class="token string">'size'</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">'width'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+  height <span class="token operator">=</span> int<span class="token punctuation">(</span>data<span class="token punctuation">[</span><span class="token string">'size'</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">'height'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+  xmin <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+  ymin <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+  xmax <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+  ymax <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+  classes <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+  classes_text <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+  truncated <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+  poses <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+  difficult_obj <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+  <span class="token keyword">if</span> <span class="token string">'object'</span> <span class="token keyword">in</span> data<span class="token punctuation">:</span>
+    <span class="token keyword">for</span> obj <span class="token keyword">in</span> data<span class="token punctuation">[</span><span class="token string">'object'</span><span class="token punctuation">]</span><span class="token punctuation">:</span>
+      difficult <span class="token operator">=</span> bool<span class="token punctuation">(</span>int<span class="token punctuation">(</span>obj<span class="token punctuation">[</span><span class="token string">'difficult'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+      <span class="token keyword">if</span> ignore_difficult_instances <span class="token operator">and</span> difficult<span class="token punctuation">:</span>
+        <span class="token keyword">continue</span>
+
+      difficult_obj<span class="token punctuation">.</span>append<span class="token punctuation">(</span>int<span class="token punctuation">(</span>difficult<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+      xmin<span class="token punctuation">.</span>append<span class="token punctuation">(</span>float<span class="token punctuation">(</span>obj<span class="token punctuation">[</span><span class="token string">'bndbox'</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">'xmin'</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">/</span> width<span class="token punctuation">)</span>
+      ymin<span class="token punctuation">.</span>append<span class="token punctuation">(</span>float<span class="token punctuation">(</span>obj<span class="token punctuation">[</span><span class="token string">'bndbox'</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">'ymin'</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">/</span> height<span class="token punctuation">)</span>
+      xmax<span class="token punctuation">.</span>append<span class="token punctuation">(</span>float<span class="token punctuation">(</span>obj<span class="token punctuation">[</span><span class="token string">'bndbox'</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">'xmax'</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">/</span> width<span class="token punctuation">)</span>
+      ymax<span class="token punctuation">.</span>append<span class="token punctuation">(</span>float<span class="token punctuation">(</span>obj<span class="token punctuation">[</span><span class="token string">'bndbox'</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">'ymax'</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">/</span> height<span class="token punctuation">)</span>
+      classes_text<span class="token punctuation">.</span>append<span class="token punctuation">(</span>obj<span class="token punctuation">[</span><span class="token string">'name'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token string">'utf8'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+      classes<span class="token punctuation">.</span>append<span class="token punctuation">(</span>label_map_dict<span class="token punctuation">[</span>obj<span class="token punctuation">[</span><span class="token string">'name'</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+      truncated<span class="token punctuation">.</span>append<span class="token punctuation">(</span>int<span class="token punctuation">(</span>obj<span class="token punctuation">[</span><span class="token string">'truncated'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+      poses<span class="token punctuation">.</span>append<span class="token punctuation">(</span>obj<span class="token punctuation">[</span><span class="token string">'pose'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token string">'utf8'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+  example <span class="token operator">=</span> tf<span class="token punctuation">.</span>train<span class="token punctuation">.</span>Example<span class="token punctuation">(</span>features<span class="token operator">=</span>tf<span class="token punctuation">.</span>train<span class="token punctuation">.</span>Features<span class="token punctuation">(</span>feature<span class="token operator">=</span><span class="token punctuation">{</span>
+      <span class="token string">'image/height'</span><span class="token punctuation">:</span> dataset_util<span class="token punctuation">.</span>int64_feature<span class="token punctuation">(</span>height<span class="token punctuation">)</span><span class="token punctuation">,</span>
+      <span class="token string">'image/width'</span><span class="token punctuation">:</span> dataset_util<span class="token punctuation">.</span>int64_feature<span class="token punctuation">(</span>width<span class="token punctuation">)</span><span class="token punctuation">,</span>
+      <span class="token string">'image/filename'</span><span class="token punctuation">:</span> dataset_util<span class="token punctuation">.</span>bytes_feature<span class="token punctuation">(</span>
+          data<span class="token punctuation">[</span><span class="token string">'filename'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token string">'utf8'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+      <span class="token string">'image/source_id'</span><span class="token punctuation">:</span> dataset_util<span class="token punctuation">.</span>bytes_feature<span class="token punctuation">(</span>
+          data<span class="token punctuation">[</span><span class="token string">'filename'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token string">'utf8'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+      <span class="token string">'image/key/sha256'</span><span class="token punctuation">:</span> dataset_util<span class="token punctuation">.</span>bytes_feature<span class="token punctuation">(</span>key<span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token string">'utf8'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+      <span class="token string">'image/encoded'</span><span class="token punctuation">:</span> dataset_util<span class="token punctuation">.</span>bytes_feature<span class="token punctuation">(</span>encoded_jpg<span class="token punctuation">)</span><span class="token punctuation">,</span>
+      <span class="token string">'image/format'</span><span class="token punctuation">:</span> dataset_util<span class="token punctuation">.</span>bytes_feature<span class="token punctuation">(</span><span class="token string">'jpeg'</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token string">'utf8'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+      <span class="token string">'image/object/bbox/xmin'</span><span class="token punctuation">:</span> dataset_util<span class="token punctuation">.</span>float_list_feature<span class="token punctuation">(</span>xmin<span class="token punctuation">)</span><span class="token punctuation">,</span>
+      <span class="token string">'image/object/bbox/xmax'</span><span class="token punctuation">:</span> dataset_util<span class="token punctuation">.</span>float_list_feature<span class="token punctuation">(</span>xmax<span class="token punctuation">)</span><span class="token punctuation">,</span>
+      <span class="token string">'image/object/bbox/ymin'</span><span class="token punctuation">:</span> dataset_util<span class="token punctuation">.</span>float_list_feature<span class="token punctuation">(</span>ymin<span class="token punctuation">)</span><span class="token punctuation">,</span>
+      <span class="token string">'image/object/bbox/ymax'</span><span class="token punctuation">:</span> dataset_util<span class="token punctuation">.</span>float_list_feature<span class="token punctuation">(</span>ymax<span class="token punctuation">)</span><span class="token punctuation">,</span>
+      <span class="token string">'image/object/class/text'</span><span class="token punctuation">:</span> dataset_util<span class="token punctuation">.</span>bytes_list_feature<span class="token punctuation">(</span>classes_text<span class="token punctuation">)</span><span class="token punctuation">,</span>
+      <span class="token string">'image/object/class/label'</span><span class="token punctuation">:</span> dataset_util<span class="token punctuation">.</span>int64_list_feature<span class="token punctuation">(</span>classes<span class="token punctuation">)</span><span class="token punctuation">,</span>
+      <span class="token string">'image/object/difficult'</span><span class="token punctuation">:</span> dataset_util<span class="token punctuation">.</span>int64_list_feature<span class="token punctuation">(</span>difficult_obj<span class="token punctuation">)</span><span class="token punctuation">,</span>
+      <span class="token string">'image/object/truncated'</span><span class="token punctuation">:</span> dataset_util<span class="token punctuation">.</span>int64_list_feature<span class="token punctuation">(</span>truncated<span class="token punctuation">)</span><span class="token punctuation">,</span>
+      <span class="token string">'image/object/view'</span><span class="token punctuation">:</span> dataset_util<span class="token punctuation">.</span>bytes_list_feature<span class="token punctuation">(</span>poses<span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token keyword">return</span> example
+
+
+<span class="token keyword">def</span> <span class="token function">main</span><span class="token punctuation">(</span>_<span class="token punctuation">)</span><span class="token punctuation">:</span>
+  <span class="token keyword">if</span> FLAGS<span class="token punctuation">.</span>set <span class="token operator">not</span> <span class="token keyword">in</span> SETS<span class="token punctuation">:</span>
+    <span class="token keyword">raise</span> ValueError<span class="token punctuation">(</span><span class="token string">'set must be in : {}'</span><span class="token punctuation">.</span>format<span class="token punctuation">(</span>SETS<span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token keyword">if</span> FLAGS<span class="token punctuation">.</span>year <span class="token operator">not</span> <span class="token keyword">in</span> YEARS<span class="token punctuation">:</span>
+    <span class="token keyword">raise</span> ValueError<span class="token punctuation">(</span><span class="token string">'year must be in : {}'</span><span class="token punctuation">.</span>format<span class="token punctuation">(</span>YEARS<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+  data_dir <span class="token operator">=</span> FLAGS<span class="token punctuation">.</span>data_dir
+  years <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">'VOC2007'</span><span class="token punctuation">,</span> <span class="token string">'VOC2012'</span><span class="token punctuation">]</span>
+  <span class="token keyword">if</span> FLAGS<span class="token punctuation">.</span>year <span class="token operator">!=</span> <span class="token string">'merged'</span><span class="token punctuation">:</span>
+    years <span class="token operator">=</span> <span class="token punctuation">[</span>FLAGS<span class="token punctuation">.</span>year<span class="token punctuation">]</span>
+
+  writer <span class="token operator">=</span> tf<span class="token punctuation">.</span>python_io<span class="token punctuation">.</span>TFRecordWriter<span class="token punctuation">(</span>FLAGS<span class="token punctuation">.</span>output_path<span class="token punctuation">)</span>
+
+  label_map_dict <span class="token operator">=</span> label_map_util<span class="token punctuation">.</span>get_label_map_dict<span class="token punctuation">(</span>FLAGS<span class="token punctuation">.</span>label_map_path<span class="token punctuation">)</span>
+
+  <span class="token keyword">for</span> year <span class="token keyword">in</span> years<span class="token punctuation">:</span>
+    logging<span class="token punctuation">.</span>info<span class="token punctuation">(</span><span class="token string">'Reading from PASCAL %s dataset.'</span><span class="token punctuation">,</span> year<span class="token punctuation">)</span>
+    examples_path <span class="token operator">=</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>join<span class="token punctuation">(</span>data_dir<span class="token punctuation">,</span> year<span class="token punctuation">,</span> <span class="token string">'ImageSets'</span><span class="token punctuation">,</span> <span class="token string">'Main'</span><span class="token punctuation">,</span>
+                                 FLAGS<span class="token punctuation">.</span>set <span class="token operator">+</span> <span class="token string">'.txt'</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#对应到相应txt文件</span>
+    annotations_dir <span class="token operator">=</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>join<span class="token punctuation">(</span>data_dir<span class="token punctuation">,</span> year<span class="token punctuation">,</span> FLAGS<span class="token punctuation">.</span>annotations_dir<span class="token punctuation">)</span>
+    examples_list <span class="token operator">=</span> dataset_util<span class="token punctuation">.</span>read_examples_list<span class="token punctuation">(</span>examples_path<span class="token punctuation">)</span>
+    <span class="token keyword">for</span> idx<span class="token punctuation">,</span> example <span class="token keyword">in</span> enumerate<span class="token punctuation">(</span>examples_list<span class="token punctuation">)</span><span class="token punctuation">:</span>
+      <span class="token keyword">if</span> idx <span class="token operator">%</span> <span class="token number">100</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">:</span>
+        logging<span class="token punctuation">.</span>info<span class="token punctuation">(</span><span class="token string">'On image %d of %d'</span><span class="token punctuation">,</span> idx<span class="token punctuation">,</span> len<span class="token punctuation">(</span>examples_list<span class="token punctuation">)</span><span class="token punctuation">)</span>
+      path <span class="token operator">=</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>join<span class="token punctuation">(</span>annotations_dir<span class="token punctuation">,</span> example <span class="token operator">+</span> <span class="token string">'.xml'</span><span class="token punctuation">)</span>
+      <span class="token keyword">with</span> tf<span class="token punctuation">.</span>gfile<span class="token punctuation">.</span>GFile<span class="token punctuation">(</span>path<span class="token punctuation">,</span> <span class="token string">'r'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> fid<span class="token punctuation">:</span>
+        xml_str <span class="token operator">=</span> fid<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>
+      xml <span class="token operator">=</span> etree<span class="token punctuation">.</span>fromstring<span class="token punctuation">(</span>xml_str<span class="token punctuation">)</span>
+      data <span class="token operator">=</span> dataset_util<span class="token punctuation">.</span>recursive_parse_xml_to_dict<span class="token punctuation">(</span>xml<span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token string">'annotation'</span><span class="token punctuation">]</span>
+
+      tf_example <span class="token operator">=</span> dict_to_tf_example<span class="token punctuation">(</span>data<span class="token punctuation">,</span> FLAGS<span class="token punctuation">.</span>data_dir<span class="token punctuation">,</span> label_map_dict<span class="token punctuation">,</span>
+                                      FLAGS<span class="token punctuation">.</span>ignore_difficult_instances<span class="token punctuation">)</span>
+      writer<span class="token punctuation">.</span>write<span class="token punctuation">(</span>tf_example<span class="token punctuation">.</span>SerializeToString<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+  writer<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
+  tf<span class="token punctuation">.</span>app<span class="token punctuation">.</span>run<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="b-tfrecord制作"><a href="#b-tfrecord制作" class="headerlink" title="b. tfrecord制作"></a>b. tfrecord制作</h3><p>首先通过xml_to_csv.py将数据集转换为csv文件，让后通过generate_tfrecord.py生成tfrecord。</p>
+<h2 id="3-训练准备"><a href="#3-训练准备" class="headerlink" title="3. 训练准备"></a>3. 训练准备</h2><h3 id="a-下载预训练模型"><a href="#a-下载预训练模型" class="headerlink" title="a. 下载预训练模型"></a>a. 下载<a href="https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md" target="_blank" rel="noopener">预训练模型</a></h3><h3 id="b-config文件修改"><a href="#b-config文件修改" class="headerlink" title="b. config文件修改"></a>b. config文件修改</h3><p>在sample/configs/下</p>
+<pre class="line-numbers language-python"><code class="language-python"><span class="token comment" spellcheck="true"># Faster R-CNN with Inception v2, configuration for MSCOCO Dataset.</span>
+<span class="token comment" spellcheck="true"># Users should configure the fine_tune_checkpoint field in the train config as</span>
+<span class="token comment" spellcheck="true"># well as the label_map_path and input_path fields in the train_input_reader and</span>
+<span class="token comment" spellcheck="true"># eval_input_reader. Search for "PATH_TO_BE_CONFIGURED" to find the fields that</span>
+<span class="token comment" spellcheck="true"># should be configured.</span>
+
+model <span class="token punctuation">{</span>
+  faster_rcnn <span class="token punctuation">{</span>
+    num_classes<span class="token punctuation">:</span> <span class="token number">1</span>        <span class="token comment" spellcheck="true"># 修改这里 改成自己的类数</span>
+    image_resizer <span class="token punctuation">{</span>
+      keep_aspect_ratio_resizer <span class="token punctuation">{</span>
+        min_dimension<span class="token punctuation">:</span> <span class="token number">600</span>
+        max_dimension<span class="token punctuation">:</span> <span class="token number">1024</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    feature_extractor <span class="token punctuation">{</span>
+      type<span class="token punctuation">:</span> <span class="token string">'faster_rcnn_inception_v2'</span>
+      first_stage_features_stride<span class="token punctuation">:</span> <span class="token number">16</span>
+    <span class="token punctuation">}</span>
+    first_stage_anchor_generator <span class="token punctuation">{</span>
+      grid_anchor_generator <span class="token punctuation">{</span>
+        scales<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token number">0.25</span><span class="token punctuation">,</span> <span class="token number">0.5</span><span class="token punctuation">,</span> <span class="token number">1.0</span><span class="token punctuation">,</span> <span class="token number">2.0</span><span class="token punctuation">]</span>
+        aspect_ratios<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token number">0.5</span><span class="token punctuation">,</span> <span class="token number">1.0</span><span class="token punctuation">,</span> <span class="token number">2.0</span><span class="token punctuation">]</span>
+        height_stride<span class="token punctuation">:</span> <span class="token number">16</span>
+        width_stride<span class="token punctuation">:</span> <span class="token number">16</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    first_stage_box_predictor_conv_hyperparams <span class="token punctuation">{</span>
+      op<span class="token punctuation">:</span> CONV
+      regularizer <span class="token punctuation">{</span>
+        l2_regularizer <span class="token punctuation">{</span>
+          weight<span class="token punctuation">:</span> <span class="token number">0.0</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
+      initializer <span class="token punctuation">{</span>
+        truncated_normal_initializer <span class="token punctuation">{</span>
+          stddev<span class="token punctuation">:</span> <span class="token number">0.01</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    first_stage_nms_score_threshold<span class="token punctuation">:</span> <span class="token number">0.0</span>
+    first_stage_nms_iou_threshold<span class="token punctuation">:</span> <span class="token number">0.7</span>
+    first_stage_max_proposals<span class="token punctuation">:</span> <span class="token number">300</span>
+    first_stage_localization_loss_weight<span class="token punctuation">:</span> <span class="token number">2.0</span>
+    first_stage_objectness_loss_weight<span class="token punctuation">:</span> <span class="token number">1.0</span>
+    initial_crop_size<span class="token punctuation">:</span> <span class="token number">14</span>
+    maxpool_kernel_size<span class="token punctuation">:</span> <span class="token number">2</span>
+    maxpool_stride<span class="token punctuation">:</span> <span class="token number">2</span>
+    second_stage_box_predictor <span class="token punctuation">{</span>
+      mask_rcnn_box_predictor <span class="token punctuation">{</span>
+        use_dropout<span class="token punctuation">:</span> false
+        dropout_keep_probability<span class="token punctuation">:</span> <span class="token number">1.0</span>
+        fc_hyperparams <span class="token punctuation">{</span>
+          op<span class="token punctuation">:</span> FC
+          regularizer <span class="token punctuation">{</span>
+            l2_regularizer <span class="token punctuation">{</span>
+              weight<span class="token punctuation">:</span> <span class="token number">0.0</span>
+            <span class="token punctuation">}</span>
+          <span class="token punctuation">}</span>
+          initializer <span class="token punctuation">{</span>
+            variance_scaling_initializer <span class="token punctuation">{</span>
+              factor<span class="token punctuation">:</span> <span class="token number">1.0</span>
+              uniform<span class="token punctuation">:</span> true
+              mode<span class="token punctuation">:</span> FAN_AVG
+            <span class="token punctuation">}</span>
+          <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    second_stage_post_processing <span class="token punctuation">{</span>
+      batch_non_max_suppression <span class="token punctuation">{</span>
+        score_threshold<span class="token punctuation">:</span> <span class="token number">0.0</span>
+        iou_threshold<span class="token punctuation">:</span> <span class="token number">0.6</span>
+        max_detections_per_class<span class="token punctuation">:</span> <span class="token number">100</span>
+        max_total_detections<span class="token punctuation">:</span> <span class="token number">300</span>
+      <span class="token punctuation">}</span>
+      score_converter<span class="token punctuation">:</span> SOFTMAX
+    <span class="token punctuation">}</span>
+    second_stage_localization_loss_weight<span class="token punctuation">:</span> <span class="token number">2.0</span>
+    second_stage_classification_loss_weight<span class="token punctuation">:</span> <span class="token number">1.0</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true"># 这部分为对训练过程进行微调</span>
+train_config<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+
+<span class="token comment" spellcheck="true"># batch_size 可根据自己的显存大小调整</span>
+  batch_size<span class="token punctuation">:</span> <span class="token number">1</span>
+
+  optimizer <span class="token punctuation">{</span>
+    momentum_optimizer<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+      learning_rate<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        manual_step_learning_rate <span class="token punctuation">{</span>
+          initial_learning_rate<span class="token punctuation">:</span> <span class="token number">0.0002</span>
+          schedule <span class="token punctuation">{</span>
+            step<span class="token punctuation">:</span> <span class="token number">900000</span>
+            learning_rate<span class="token punctuation">:</span> <span class="token punctuation">.</span><span class="token number">00002</span>
+          <span class="token punctuation">}</span>
+          schedule <span class="token punctuation">{</span>
+            step<span class="token punctuation">:</span> <span class="token number">1200000</span>
+            learning_rate<span class="token punctuation">:</span> <span class="token punctuation">.</span><span class="token number">000002</span>
+          <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
+      momentum_optimizer_value<span class="token punctuation">:</span> <span class="token number">0.9</span>
+    <span class="token punctuation">}</span>
+    use_moving_average<span class="token punctuation">:</span> false
+  <span class="token punctuation">}</span>
+  gradient_clipping_by_norm<span class="token punctuation">:</span> <span class="token number">10.0</span>
+
+  fine_tune_checkpoint<span class="token punctuation">:</span> <span class="token string">"faster_rcnn_inception_v2_coco_2018_01_28/model.ckpt"</span><span class="token comment" spellcheck="true">#对应到下载模型地址</span>
+
+  from_detection_checkpoint<span class="token punctuation">:</span> true<span class="token comment" spellcheck="true">#使用迁移学习</span>
+
+  <span class="token comment" spellcheck="true"># Note: The below line limits the training process to 200K steps, which we</span>
+  <span class="token comment" spellcheck="true"># empirically found to be sufficient enough to train the COCO dataset. This</span>
+  <span class="token comment" spellcheck="true"># effectively bypasses the learning rate schedule (the learning rate will</span>
+  <span class="token comment" spellcheck="true"># never decay). Remove the below line to train indefinitely.</span>
+  num_steps<span class="token punctuation">:</span> <span class="token number">200000</span>
+  data_augmentation_options <span class="token punctuation">{</span>
+    random_horizontal_flip <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+train_input_reader<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+  tf_record_input_reader <span class="token punctuation">{</span>
+    input_path<span class="token punctuation">:</span> <span class="token string">"train.record"</span><span class="token comment" spellcheck="true"># train.record路径</span>
+  <span class="token punctuation">}</span>
+  label_map_path<span class="token punctuation">:</span> <span class="token string">"label_map.pbtxt"</span><span class="token comment" spellcheck="true">## .pptxt文件地址</span>
+<span class="token punctuation">}</span>
+
+eval_config<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+  num_examples<span class="token punctuation">:</span> <span class="token number">1000</span>
+  <span class="token comment" spellcheck="true"># Note: The below line limits the evaluation process to 10 evaluations.</span>
+  <span class="token comment" spellcheck="true"># Remove the below line to evaluate indefinitely.</span>
+  max_evals<span class="token punctuation">:</span> <span class="token number">10</span>
+<span class="token punctuation">}</span>
+
+eval_input_reader<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+  tf_record_input_reader <span class="token punctuation">{</span>
+    input_path<span class="token punctuation">:</span> <span class="token string">"val.record"</span>
+  <span class="token punctuation">}</span>
+  label_map_path<span class="token punctuation">:</span> <span class="token string">"label_map.pbtxt"</span>
+  shuffle<span class="token punctuation">:</span> false
+  num_readers<span class="token punctuation">:</span> <span class="token number">1</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="c-pbtxt文件"><a href="#c-pbtxt文件" class="headerlink" title="c. .pbtxt文件"></a>c. .pbtxt文件</h3><pre><code>#内容如下 data/文件夹下有模板
+item {
+  id: 1
+  name: &#39;person&#39;
+}</code></pre><h2 id="4-训练模型"><a href="#4-训练模型" class="headerlink" title="4. 训练模型"></a>4. 训练模型</h2><h3 id="a-model-main-py"><a href="#a-model-main-py" class="headerlink" title="a. model_main .py"></a>a. model_main .py</h3><pre class="line-numbers language-python"><code class="language-python">python object_detection<span class="token operator">/</span>model_main<span class="token punctuation">.</span>py  <span class="token comment" spellcheck="true">#model_main.py 对应位置</span>
+ <span class="token operator">-</span><span class="token operator">-</span>alsologtostderr \
+ <span class="token operator">-</span><span class="token operator">-</span>pipeline_config_path<span class="token operator">=</span>faster_rcnn_resnet50_coco<span class="token punctuation">.</span>config \  <span class="token comment" spellcheck="true">#config文件对应位置</span>
+ <span class="token operator">-</span><span class="token operator">-</span>model_dir<span class="token operator">=</span>save_model \ <span class="token comment" spellcheck="true">#训练模型储存位置</span>
+ <span class="token operator">-</span><span class="token operator">-</span>num_train_steps<span class="token operator">=</span><span class="token number">50000</span> \ 
+ <span class="token operator">-</span><span class="token operator">-</span>num_eval_steps<span class="token operator">=</span><span class="token number">2000</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="b-train-py-旧版-legacy"><a href="#b-train-py-旧版-legacy" class="headerlink" title="b. train .py(旧版 legacy/)"></a>b. train .py(旧版 legacy/)</h3><pre class="line-numbers language-python"><code class="language-python">python object_detection\legacy\train<span class="token punctuation">.</span>py 
+ <span class="token operator">-</span><span class="token operator">-</span>logtostderr \
+ <span class="token operator">-</span><span class="token operator">-</span>train_dir<span class="token operator">=</span>save_model \ <span class="token comment" spellcheck="true">#模型保存位置</span>
+ <span class="token operator">-</span><span class="token operator">-</span>pipeline_config_path<span class="token operator">=</span>faster_rcnn_inception_v2_coco<span class="token punctuation">.</span>config <span class="token comment" spellcheck="true">#对应config位置</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="5-tesorboard"><a href="#5-tesorboard" class="headerlink" title="5. tesorboard"></a>5. tesorboard</h2><pre class="line-numbers language-python"><code class="language-python">tensorboard <span class="token operator">-</span><span class="token operator">-</span>logdir<span class="token operator">=</span>model <span class="token comment" spellcheck="true">#model 位置</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="6-模型转换"><a href="#6-模型转换" class="headerlink" title="6. 模型转换"></a>6. 模型转换</h2><pre class="line-numbers language-python"><code class="language-python">python export_inference_graph<span class="token punctuation">.</span>py \ 
+ <span class="token operator">-</span><span class="token operator">-</span>input_type image_tensor \ 
+ <span class="token operator">-</span><span class="token operator">-</span>pipeline_config_path ssd_mobilenet_v1_coco<span class="token punctuation">.</span>config \  <span class="token operator">-</span><span class="token operator">-</span>trained_checkpoint_prefix model<span class="token punctuation">.</span>ckpt<span class="token number">-100000</span> \  <span class="token comment" spellcheck="true">#这里要根据自己训练的次数修改model.ckpt-10000的数字</span>
+ <span class="token operator">-</span><span class="token operator">-</span>output_directory person_inference_graph <span class="token comment" spellcheck="true">#输入转换后保存模型的地址</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">huazhe</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://huazhe1995.github.io/2020/03/14/tensorflow-object-detection-api-xun-lian-zi-ji-de-shu-ju-ji/">http://huazhe1995.github.io/2020/03/14/tensorflow-object-detection-api-xun-lian-zi-ji-de-shu-ju-ji/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://huazhe1995.github.io" target="_blank">huazhe's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/object-detection/">object detection</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"/><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js"></script></div></div><nav class="pagination_post" id="pagination"><div class="prev-post pull_left"><a href="/2020/03/14/ros-diao-yong-cv-bridge-wen-ti/"><img class="prev_cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">ROS调用cv_bridge问题</div></div></a></div><div class="next-post pull_right"><a href="/2020/02/09/ros-xia-intel-realsense-d435i-an-zhuang/"><img class="next_cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">ROS下intel realsense D435i安装</div></div></a></div></nav><div class="relatedPosts"><div class="relatedPosts_headline"><i class="fa fa-fw fa-thumbs-up" aria-hidden="true"></i><span> 相关推荐</span></div><div class="relatedPosts_list"><div class="relatedPosts_item"><a href="/2020/01/31/faster-r-cnn-xun-lian-mo-xing/" title="Faster R-CNN训练模型"><img class="relatedPosts_cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> 2020-01-31</div><div class="relatedPosts_title">Faster R-CNN训练模型</div></div></a></div></div><div class="clear_both"></div></div></article></main><footer id="footer" style="background-image: url(https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg)" data-type="photo"><div id="footer-wrap"><div class="copyright">&copy;2020 By huazhe</div><div class="framework-info"><span>驱动 </span><a href="https://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 </span><a href="https://github.com/jerryc127/hexo-theme-butterfly" target="_blank" rel="noopener"><span>Butterfly</span></a></div></div></footer></div><section class="rightside" id="rightside"><div id="rightside-config-hide"><i class="fa fa-book" id="readmode" title="阅读模式"></i><i class="fa fa-plus" id="font_plus" title="放大字体"></i><i class="fa fa-minus" id="font_minus" title="缩小字体"></i><a class="translate_chn_to_cht" id="translateLink" href="javascript:translatePage();" title="简繁转换" target="_self">繁</a><i class="darkmode fa fa-moon-o" id="darkmode" title="夜间模式"></i></div><div id="rightside-config-show"><div id="rightside_config" title="设置"><i class="fa fa-cog" aria-hidden="true"></i></div><i class="fa fa-list-ul close" id="mobile-toc-button" title="目录" aria-hidden="true"></i><i class="fa fa-arrow-up" id="go-up" title="回到顶部" aria-hidden="true"></i></div></section><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script id="ribbon_piao" mobile="false" src="/js/third-party/piao.js"></script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page@3/instantpage.min.js" type="module"></script></body></html>

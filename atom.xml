@@ -1,0 +1,490 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>huazhe&#39;s blog</title>
+  
+  <subtitle>huazhe</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://huazhe1995.github.io/"/>
+  <updated>2020-07-05T13:30:53.679Z</updated>
+  <id>http://huazhe1995.github.io/</id>
+  
+  <author>
+    <name>huazhe</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>linear_regression</title>
+    <link href="http://huazhe1995.github.io/2020/07/05/linear-regression/"/>
+    <id>http://huazhe1995.github.io/2020/07/05/linear-regression/</id>
+    <published>2020-07-05T13:08:33.000Z</published>
+    <updated>2020-07-05T13:30:53.679Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;线性回归&quot;&gt;&lt;a href=&quot;#线性回归&quot; class=&quot;headerlink&quot; title=&quot;线性回归&quot;&gt;&lt;/a&gt;线性回归&lt;/h1&gt;&lt;pre class=&quot;line-numbers language-python&quot;&gt;&lt;code
+        
+      
+    
+    </summary>
+    
+    
+      <category term="machine learning" scheme="http://huazhe1995.github.io/categories/machine-learning/"/>
+    
+    
+      <category term="linear regression" scheme="http://huazhe1995.github.io/tags/linear-regression/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>yolov3 训练模型</title>
+    <link href="http://huazhe1995.github.io/2020/06/22/yolov3-xun-lian-mo-xing/"/>
+    <id>http://huazhe1995.github.io/2020/06/22/yolov3-xun-lian-mo-xing/</id>
+    <published>2020-06-22T14:42:07.000Z</published>
+    <updated>2020-06-26T12:48:05.903Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;yolov3-darknet-训练模型&quot;&gt;&lt;a href=&quot;#yolov3-darknet-训练模型&quot; class=&quot;headerlink&quot; title=&quot;yolov3_darknet 训练模型&quot;&gt;&lt;/a&gt;yolov3_darknet
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Deep learning" scheme="http://huazhe1995.github.io/categories/Deep-learning/"/>
+    
+    
+      <category term="YOLO" scheme="http://huazhe1995.github.io/tags/YOLO/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>darknet_ros功能包实现3D空间坐标显示</title>
+    <link href="http://huazhe1995.github.io/2020/05/20/darknet-ros-gong-neng-bao-shi-xian-3d-kong-jian-zuo-biao-xian-shi/"/>
+    <id>http://huazhe1995.github.io/2020/05/20/darknet-ros-gong-neng-bao-shi-xian-3d-kong-jian-zuo-biao-xian-shi/</id>
+    <published>2020-05-20T05:14:00.000Z</published>
+    <updated>2020-05-21T06:04:32.123Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;目标检测bounding-boxes-生成3D空间坐标显示&quot;&gt;&lt;a href=&quot;#目标检测bounding-boxes-生成3D空间坐标显示&quot; class=&quot;headerlink&quot; title=&quot;目标检测bounding boxes
+        
+      
+    
+    </summary>
+    
+    
+      <category term="ROS" scheme="http://huazhe1995.github.io/categories/ROS/"/>
+    
+    
+      <category term="darknet_ros" scheme="http://huazhe1995.github.io/tags/darknet-ros/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ROS find_object功能包</title>
+    <link href="http://huazhe1995.github.io/2020/03/25/ros-find-object-gong-neng-bao/"/>
+    <id>http://huazhe1995.github.io/2020/03/25/ros-find-object-gong-neng-bao/</id>
+    <published>2020-03-25T13:15:49.000Z</published>
+    <updated>2020-05-04T04:52:12.031Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;ROS功能包-find-object的使用&quot;&gt;&lt;a href=&quot;#ROS功能包-find-object的使用&quot; class=&quot;headerlink&quot; title=&quot;ROS功能包 find_object的使用&quot;&gt;&lt;/a&gt;ROS功能包
+        
+      
+    
+    </summary>
+    
+    
+      <category term="ROS" scheme="http://huazhe1995.github.io/categories/ROS/"/>
+    
+    
+      <category term="find_object" scheme="http://huazhe1995.github.io/tags/find-object/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ROS笔记</title>
+    <link href="http://huazhe1995.github.io/2020/03/19/ros-bi-ji/"/>
+    <id>http://huazhe1995.github.io/2020/03/19/ros-bi-ji/</id>
+    <published>2020-03-19T14:41:00.000Z</published>
+    <updated>2020-04-11T12:30:54.000Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;#ROS&lt;/p&gt;
+&lt;h2 id=&quot;catkin工作空间&quot;&gt;&lt;a href=&quot;#catkin工作空间&quot; class=&quot;headerlink&quot; title=&quot;catkin工作空间&quot;&gt;&lt;/a&gt;catkin工作空间&lt;/h2&gt;&lt;p&gt;&lt;a
+        
+      
+    
+    </summary>
+    
+    
+      <category term="NOTE" scheme="http://huazhe1995.github.io/categories/NOTE/"/>
+    
+    
+      <category term="ROS" scheme="http://huazhe1995.github.io/tags/ROS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>tensorflow 笔记</title>
+    <link href="http://huazhe1995.github.io/2020/03/15/tensorflow-bi-ji/"/>
+    <id>http://huazhe1995.github.io/2020/03/15/tensorflow-bi-ji/</id>
+    <published>2020-03-15T14:12:50.000Z</published>
+    <updated>2020-05-04T04:49:15.105Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;tensotflow笔记&quot;&gt;&lt;a href=&quot;#tensotflow笔记&quot; class=&quot;headerlink&quot; title=&quot;tensotflow笔记&quot;&gt;&lt;/a&gt;tensotflow笔记&lt;/h1&gt;&lt;p&gt;&lt;a
+        
+      
+    
+    </summary>
+    
+    
+      <category term="note" scheme="http://huazhe1995.github.io/categories/note/"/>
+    
+    
+      <category term="tensorflow" scheme="http://huazhe1995.github.io/tags/tensorflow/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ROS调用cv_bridge问题</title>
+    <link href="http://huazhe1995.github.io/2020/03/14/ros-diao-yong-cv-bridge-wen-ti/"/>
+    <id>http://huazhe1995.github.io/2020/03/14/ros-diao-yong-cv-bridge-wen-ti/</id>
+    <published>2020-03-14T11:52:16.000Z</published>
+    <updated>2020-03-19T14:45:20.000Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;ROS调用cv-bridge问题&quot;&gt;&lt;a href=&quot;#ROS调用cv-bridge问题&quot; class=&quot;headerlink&quot; title=&quot;ROS调用cv_bridge问题&quot;&gt;&lt;/a&gt;ROS调用cv_bridge问题&lt;/h1&gt;&lt;h2 id=&quot;问题报错&quot;&gt;&lt;a
+        
+      
+    
+    </summary>
+    
+    
+      <category term="ROS" scheme="http://huazhe1995.github.io/categories/ROS/"/>
+    
+    
+      <category term="opencv" scheme="http://huazhe1995.github.io/tags/opencv/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>tensorflow object detection API 训练自己的数据集</title>
+    <link href="http://huazhe1995.github.io/2020/03/14/tensorflow-object-detection-api-xun-lian-zi-ji-de-shu-ju-ji/"/>
+    <id>http://huazhe1995.github.io/2020/03/14/tensorflow-object-detection-api-xun-lian-zi-ji-de-shu-ju-ji/</id>
+    <published>2020-03-14T08:13:51.000Z</published>
+    <updated>2020-04-12T15:11:56.000Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;tensorflow-object-detection-API-训练数据集&quot;&gt;&lt;a href=&quot;#tensorflow-object-detection-API-训练数据集&quot; class=&quot;headerlink&quot; title=&quot;tensorflow object
+        
+      
+    
+    </summary>
+    
+    
+      <category term="tensorflow" scheme="http://huazhe1995.github.io/categories/tensorflow/"/>
+    
+    
+      <category term="object detection" scheme="http://huazhe1995.github.io/tags/object-detection/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ROS下intel realsense D435i安装</title>
+    <link href="http://huazhe1995.github.io/2020/02/09/ros-xia-intel-realsense-d435i-an-zhuang/"/>
+    <id>http://huazhe1995.github.io/2020/02/09/ros-xia-intel-realsense-d435i-an-zhuang/</id>
+    <published>2020-02-08T22:11:17.000Z</published>
+    <updated>2020-05-04T05:05:21.889Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;ROS下intel-realsense-D435i安装&quot;&gt;&lt;a href=&quot;#ROS下intel-realsense-D435i安装&quot; class=&quot;headerlink&quot; title=&quot;ROS下intel realsense
+        
+      
+    
+    </summary>
+    
+    
+      <category term="ROS" scheme="http://huazhe1995.github.io/categories/ROS/"/>
+    
+    
+      <category term="INTEL REALSENSE" scheme="http://huazhe1995.github.io/tags/INTEL-REALSENSE/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Faster R-CNN训练模型</title>
+    <link href="http://huazhe1995.github.io/2020/01/31/faster-r-cnn-xun-lian-mo-xing/"/>
+    <id>http://huazhe1995.github.io/2020/01/31/faster-r-cnn-xun-lian-mo-xing/</id>
+    <published>2020-01-31T13:53:06.000Z</published>
+    <updated>2020-06-25T13:08:50.171Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;具体操作参考源码地址:&lt;a href=&quot;https://github.com/endernewton/tf-faster-rcnn&quot; target=&quot;_blank&quot;
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Deep learning" scheme="http://huazhe1995.github.io/categories/Deep-learning/"/>
+    
+    
+      <category term="Faster R-CNN" scheme="http://huazhe1995.github.io/tags/Faster-R-CNN/"/>
+    
+      <category term="object detection" scheme="http://huazhe1995.github.io/tags/object-detection/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>深度学习环境IDE(pycharm)</title>
+    <link href="http://huazhe1995.github.io/2020/01/30/shen-du-xue-xi-huan-jing-ide-pycharm/"/>
+    <id>http://huazhe1995.github.io/2020/01/30/shen-du-xue-xi-huan-jing-ide-pycharm/</id>
+    <published>2020-01-30T14:44:31.000Z</published>
+    <updated>2020-03-24T13:43:46.000Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;1-pycharm安装&quot;&gt;&lt;a href=&quot;#1-pycharm安装&quot; class=&quot;headerlink&quot; title=&quot;1.pycharm安装&quot;&gt;&lt;/a&gt;1.pycharm安装&lt;/h1&gt;&lt;p&gt;1）.下载Community版&lt;/p&gt;
+&lt;p&gt;&lt;a
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Deep learning" scheme="http://huazhe1995.github.io/categories/Deep-learning/"/>
+    
+    
+      <category term="pycharm" scheme="http://huazhe1995.github.io/tags/pycharm/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>labelimg安装</title>
+    <link href="http://huazhe1995.github.io/2020/01/30/labelimg-an-zhuang/"/>
+    <id>http://huazhe1995.github.io/2020/01/30/labelimg-an-zhuang/</id>
+    <published>2020-01-30T14:42:46.000Z</published>
+    <updated>2020-03-19T14:44:52.000Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;源码地址：&lt;a href=&quot;https://github.com/tzutalin/labelImg&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/tzutalin/labelImg&lt;/a&gt;&lt;/p&gt;
+&lt;h1
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Deep learning" scheme="http://huazhe1995.github.io/categories/Deep-learning/"/>
+    
+    
+      <category term="labelimg" scheme="http://huazhe1995.github.io/tags/labelimg/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Faster R-CNN环境配置</title>
+    <link href="http://huazhe1995.github.io/2020/01/25/faster-r-cnn-huan-jing-pei-zhi/"/>
+    <id>http://huazhe1995.github.io/2020/01/25/faster-r-cnn-huan-jing-pei-zhi/</id>
+    <published>2020-01-25T07:40:51.000Z</published>
+    <updated>2020-03-19T14:44:22.000Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;1.驱动安装(nvidia-smi)&lt;/p&gt;
+&lt;p&gt;2.cuda安装(nvcc -V)&lt;/p&gt;
+&lt;p&gt;3.cudnn安装(cat /usr/local/cuda/include/cudnn.h | grep CUDNN_MAJOR -A
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Deep learning" scheme="http://huazhe1995.github.io/categories/Deep-learning/"/>
+    
+    
+      <category term="Faster R-CNN" scheme="http://huazhe1995.github.io/tags/Faster-R-CNN/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>cuda cudnn安装卸载</title>
+    <link href="http://huazhe1995.github.io/2020/01/24/cuda-cudnn-an-zhuang-xie-zai/"/>
+    <id>http://huazhe1995.github.io/2020/01/24/cuda-cudnn-an-zhuang-xie-zai/</id>
+    <published>2020-01-24T04:45:07.000Z</published>
+    <updated>2020-05-06T21:49:06.786Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;1-cuda安装&quot;&gt;&lt;a href=&quot;#1-cuda安装&quot; class=&quot;headerlink&quot; title=&quot;1.cuda安装&quot;&gt;&lt;/a&gt;1.cuda安装&lt;/h1&gt;&lt;p&gt;选择对应版本，系统，下载runfile{local}文件。&lt;/p&gt;
+&lt;p&gt;&lt;a
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Deep learning" scheme="http://huazhe1995.github.io/categories/Deep-learning/"/>
+    
+    
+      <category term="cuda" scheme="http://huazhe1995.github.io/tags/cuda/"/>
+    
+      <category term="cudnn" scheme="http://huazhe1995.github.io/tags/cudnn/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Ubuntu 安装 ROS</title>
+    <link href="http://huazhe1995.github.io/2020/01/15/ubuntu-an-zhuang-ros/"/>
+    <id>http://huazhe1995.github.io/2020/01/15/ubuntu-an-zhuang-ros/</id>
+    <published>2020-01-15T07:03:13.000Z</published>
+    <updated>2020-05-01T09:26:23.096Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;Ubuntu18-04下安装ROS-Melodic&quot;&gt;&lt;a href=&quot;#Ubuntu18-04下安装ROS-Melodic&quot; class=&quot;headerlink&quot; title=&quot;Ubuntu18.04下安装ROS
+        
+      
+    
+    </summary>
+    
+    
+      <category term="ROS" scheme="http://huazhe1995.github.io/categories/ROS/"/>
+    
+    
+      <category term="ROS" scheme="http://huazhe1995.github.io/tags/ROS/"/>
+    
+      <category term="Ubuntu" scheme="http://huazhe1995.github.io/tags/Ubuntu/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>anaconda配置tensorflow</title>
+    <link href="http://huazhe1995.github.io/2020/01/06/anaconda-pei-zhi-tensorflow/"/>
+    <id>http://huazhe1995.github.io/2020/01/06/anaconda-pei-zhi-tensorflow/</id>
+    <published>2020-01-06T08:16:12.000Z</published>
+    <updated>2020-05-06T21:46:45.492Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;Anaconda配置虚拟环境安装tensorflow&quot;&gt;&lt;a href=&quot;#Anaconda配置虚拟环境安装tensorflow&quot; class=&quot;headerlink&quot;
+        
+      
+    
+    </summary>
+    
+    
+      <category term="tensorflow" scheme="http://huazhe1995.github.io/categories/tensorflow/"/>
+    
+    
+      <category term="Anaconda" scheme="http://huazhe1995.github.io/tags/Anaconda/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Ubuntu安装NVIDIA驱动(run方式)</title>
+    <link href="http://huazhe1995.github.io/2020/01/01/ubuntu-an-zhuang-nvidia-qu-dong-run-fang-shi/"/>
+    <id>http://huazhe1995.github.io/2020/01/01/ubuntu-an-zhuang-nvidia-qu-dong-run-fang-shi/</id>
+    <published>2020-01-01T12:20:00.000Z</published>
+    <updated>2020-04-27T08:02:43.373Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;Ubuntu系统安装NVIDIA驱动-run方式&quot;&gt;&lt;a href=&quot;#Ubuntu系统安装NVIDIA驱动-run方式&quot; class=&quot;headerlink&quot;
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Ubuntu" scheme="http://huazhe1995.github.io/categories/Ubuntu/"/>
+    
+    
+      <category term="NVIDIA" scheme="http://huazhe1995.github.io/tags/NVIDIA/"/>
+    
+  </entry>
+  
+</feed>
